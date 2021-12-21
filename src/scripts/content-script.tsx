@@ -1,6 +1,15 @@
 import { match } from 'ts-pattern';
 
 function main() {
+    try {
+        process()
+    } finally {
+        // Turbolinksみたいなのに対応できないので再起してゴリ押す
+        setTimeout(() => main(), 333);
+    }
+}
+
+function process() {
     let currentPage = window.location.href;
 
     match<string>(currentPage)
@@ -9,9 +18,6 @@ function main() {
             () => colorPullRequestItems()
         )
         .otherwise(() => null)
-
-    // Turbolinksみたいなのに対応できないので再起してゴリ押す
-    setTimeout(() => main(), 333);
 }
 
 function colorPullRequestItems() {
