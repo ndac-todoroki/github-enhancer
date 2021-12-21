@@ -6,18 +6,27 @@ function main() {
     match<string>(currentPage)
         .when(
             url => /.+\/pulls(\?.*)?/.test(url),
-            () => {
-                let issuesNode = document.querySelectorAll('div[aria-label="Issues"]');
-                let issues = Array.from(issuesNode[0]!.children[0]!.children) as HTMLElement[];
-                issues
-                    .filter((issue: Element) => issue.getElementsByClassName("color-fg-danger").length > 0)
-                    .forEach((issue) => issue.style.backgroundColor = "lightcoral")
-            }
+            () => colorPullRequestItems()
         )
         .otherwise(() => null)
 
     // Turbolinksみたいなのに対応できないので再起してゴリ押す
     setTimeout(() => main(), 333);
+}
+
+function colorPullRequestItems() {
+    let issuesNode = document.querySelectorAll('div[aria-label="Issues"]');
+    let issues = Array.from(issuesNode[0]!.children[0]!.children) as HTMLElement[];
+
+    // Actions失敗
+    issues
+        .filter((issue: Element) => issue.getElementsByClassName("octicon-x").length > 0)
+        .forEach((issue) => issue.style.backgroundColor = "lightcoral")
+
+    // Actions実行中
+    issues
+        .filter((issue: Element) => issue.getElementsByClassName("hx_dot-fill-pending-icon").length > 0)
+        .forEach((issue) => issue.style.backgroundColor = "moccasin")
 }
 
 document.onreadystatechange = function () {
