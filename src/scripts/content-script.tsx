@@ -9,6 +9,15 @@ function main() {
     }
 }
 
+/// 特定のページに置いて定期的に再読み込みをする
+/// 更新後はまた拡張が読み込まれるので再起読込しない
+function autoreload() {
+    let currentPage = window.location.href;
+    if (/.+\/pulls(\?.*)?/.test(currentPage)) {
+        setTimeout(() => window.location.reload(), 5000);
+    }
+}
+
 function process() {
     let currentPage = window.location.href;
 
@@ -39,5 +48,6 @@ document.onreadystatechange = function () {
     if (document.readyState === 'complete') {
         // これでもGitHubのページ遷移には対応できない…
         main();
+        autoreload();
     }
   }
